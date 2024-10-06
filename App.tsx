@@ -1,20 +1,55 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import HomeScreen from './screens/HomeScreen/HomeScreen';
+import AddTransactionScreen from './screens/AddTransactionScreen/AddTransactionScreen';
+import TransactionsScreen from './screens/TransactionsScreen/TransactionsScreen';
+import ChartsScreen from './screens/ChartsScreen/ChartsScreen';
 
+const Tab = createBottomTabNavigator();
 export default function App() {
+ 
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen 
+          name="Início" 
+          component={HomeScreen} 
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="home" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen 
+          name="Adicionar Transação" 
+          component={AddTransactionScreen} 
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="plus-box" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen 
+          name="Transações" 
+          component={TransactionsScreen} 
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen 
+          name="Gráficos" 
+          component={ChartsScreen} 
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="chart-bar" color={color} size={size} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+};
