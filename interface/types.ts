@@ -1,13 +1,15 @@
 export interface ICategory {
   id: number;
-  name: string;
+  nome: string;
+  tipo: "Despesa" | "Receita";
 }
 
 export interface ITransaction {
   id: number;
-  type: "gain" | "expense";
-  amount: number;
-  category_id: number;
-  date: string;
+  tipo: "Despesa" | "Receita";
+  total: number;
+  categoria_id: number;
+  data: string;
   category?: string;
+  descricao: string;
 }
