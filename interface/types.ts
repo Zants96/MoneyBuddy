@@ -19,9 +19,17 @@ export interface ITransacoesContextProps {
   categorias: ICategoria[];
   addTransacao: (transaction: ITransacao) => void;
   fetchTransacoes: () => void;
+  fetchTransacoesMesAtual: () => void;
   fetchCategorias: () => void;
   deleteTransacao: (id: number) => void;
   totalReceita: number;
   totalDespesa: number;
   saldo: number;
+  setMesEscolhido: (mes: number) => void;
+  setAnoEscolhido: (ano: number) => void;
+  totalReceitaMesEscolhido: number;
+  totalDespesaMesEscolhido: number;
+  saldoMesEscolhido: number;
+  formatarData: (dateString: string) => string;
+  formatarTotal: (total: number) => string;
 }
