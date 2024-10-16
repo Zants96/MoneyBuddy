@@ -1,46 +1,72 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useContext, useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import { TransacoesContext } from "../../utils/TransactionContext";
 
 export default function HomeScreen() {
+  const context = useContext(TransacoesContext);
+  const { totalReceita, totalDespesa, saldo } = context!;
+
+  let formataReceita = totalReceita.toLocaleString("pt-br", {
+    minimumFractionDigits: 2,
+  });
+  let formataDespesa = totalDespesa.toLocaleString("pt-br", {
+    minimumFractionDigits: 2,
+  });
+  let formataSaldo = saldo.toLocaleString("pt-br", {
+    minimumFractionDigits: 2,
+  });
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Resumo Financeiro</Text>
-      <Text style={styles.gain}>Total de Ganhos: R$ </Text>
-      <Text style={styles.expense}>Total de Gastos: R$ </Text>
-      <Text style={[styles.balance, styles.positive]}>
-        Saldo: R$ 
-      </Text>
-    </View>
+    <>
+      <View style={styles.containerReceitas}>
+        <Text style={styles.title}>Total de Receitas</Text>
+        <Text style={styles.title}>R$ {formataReceita}</Text>
+      </View>
+      <View style={styles.containerDespesas}>
+        <Text style={styles.title}>Total de Despesas</Text>
+        <Text style={styles.title}>R$ {formataDespesa}</Text>
+      </View>
+      <View style={styles.containerSaldo}>
+        <Text style={styles.title}>Saldo</Text>
+        <Text style={styles.title}>R$ {formataSaldo}</Text>
+      </View>
+    </>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
+  containerReceitas: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    padding: 20,
+    borderRadius: 10,
+    margin: 10,
+    backgroundColor: "green",
+  },
+  containerDespesas: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    padding: 20,
+    borderRadius: 10,
+    margin: 10,
+    backgroundColor: "red",
+  },
+  containerSaldo: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    padding: 20,
+    borderRadius: 10,
+    margin: 10,
+    backgroundColor: "#8446ff",
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  gain: {
-    fontSize: 18,
-    color: 'green',
-  },
-  expense: {
-    fontSize: 18,
-    color: 'red',
-  },
-  balance: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  positive: {
-    color: 'green',
-  },
-  negative: {
-    color: 'red',
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#F0F0F0",
+    marginTop: 10,
   },
 });
