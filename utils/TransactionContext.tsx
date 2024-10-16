@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  useEffect,
-  useMemo,
-  ReactNode,
-} from "react";
+import React, { createContext, useState, useEffect, ReactNode } from "react";
 import {
   ITransacao,
   ITransacoesContextProps,
@@ -24,10 +18,35 @@ export default function TransacoesProvider({
   const db = useSQLiteContext();
   const [transacoes, setTransacoes] = useState<ITransacao[]>([]);
   const [categorias, setCategorias] = useState<ICategoria[]>([]);
+  const dataAtual = new Date();
+  const mesAtual = dataAtual.getMonth();
+  const anoAtual = dataAtual.getFullYear();
+  const [mesEscolhido, setMesEscolhido] = useState(new Date().getMonth());
+  const [anoEscolhido, setAnoEscolhido] = useState(new Date().getFullYear());
 
-  const getTransacoesDoDB = async (): Promise<ITransacao[]> => {
+  const formatarData = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString("pt-BR", options);
+  };
+
+  const formatarTotal = (total: number) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(total);
+  };
+
+  const getTransacoesMesAtualDoDB = async (): Promise<ITransacao[]> => {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1; // getMonth() retorna 0-11, então adicionamos 1
+
     const transacoes = await db.getAllAsync<ITransacao>(
-      `SELECT * FROM transacao;`
+      `SELECT * FROM transacao WHERE strftime('%Y', data) = ? AND strftime('%m', data) = ?;`,
+      [currentYear.toString(), currentMonth.toString().padStart(2, "0")]
     );
     return transacoes;
   };
@@ -54,7 +73,12 @@ export default function TransacoesProvider({
   };
 
   const fetchTransacoes = async () => {
-    const fetchedTransacoes = await getTransacoesDoDB();
+    const fetchedTransacoes = await getTransacoesMesAtualDoDB();
+    setTransacoes(fetchedTransacoes);
+  };
+
+  const fetchTransacoesMesAtual = async () => {
+    const fetchedTransacoes = await getTransacoesMesAtualDoDB();
     setTransacoes(fetchedTransacoes);
   };
 
@@ -62,7 +86,6 @@ export default function TransacoesProvider({
     const fetchedCategorias = await getCategoriasDoDB();
     setCategorias(fetchedCategorias);
   };
-
   const addTransacao = async (transaction: ITransacao) => {
     if (
       transaction.total === undefined ||
@@ -78,7 +101,6 @@ export default function TransacoesProvider({
     await addTransacaoNoDB(transaction);
     fetchTransacoes();
   };
-
   const deleteTransacao = async (id: number) => {
     const query = "DELETE FROM transacao WHERE id = ?;";
     await db.runAsync(query, id);
@@ -90,21 +112,41 @@ export default function TransacoesProvider({
     fetchCategorias();
   }, [db]);
 
-  const totalReceita = useMemo(() => {
-    return transacoes
-      .filter((t) => t.tipo === "Receita")
-      .reduce((sum, t) => sum + t.total, 0);
-  }, [transacoes]);
+  const transacoesMesEscolhido = transacoes.filter((transacao) => {
+    const dataTransacao = new Date(transacao.data);
+    return (
+      dataTransacao.getMonth() === mesEscolhido &&
+      dataTransacao.getFullYear() === anoEscolhido
+    );
+  });
 
-  const totalDespesa = useMemo(() => {
-    return transacoes
-      .filter((t) => t.tipo === "Despesa")
-      .reduce((sum, t) => sum + t.total, 0);
-  }, [transacoes]);
+  const totalReceitaMesEscolhido = transacoesMesEscolhido
+    .filter((transacao) => transacao.tipo === "Receita")
+    .reduce((acc, transacao) => acc + transacao.total, 0);
 
-  const saldo = useMemo(() => {
-    return totalReceita - totalDespesa;
-  }, [totalReceita, totalDespesa]);
+  const totalDespesaMesEscolhido = transacoesMesEscolhido
+    .filter((transacao) => transacao.tipo === "Despesa")
+    .reduce((acc, transacao) => acc + transacao.total, 0);
+
+  const saldoMesEscolhido = totalReceitaMesEscolhido - totalDespesaMesEscolhido;
+
+  const transacoesMesAtual = transacoes.filter((transacao) => {
+    const dataTransacao = new Date(transacao.data);
+    return (
+      dataTransacao.getMonth() === mesAtual &&
+      dataTransacao.getFullYear() === anoAtual
+    );
+  });
+
+  const totalReceita = transacoesMesAtual
+    .filter((transacao) => transacao.tipo === "Receita")
+    .reduce((acc, transacao) => acc + transacao.total, 0);
+
+  const totalDespesa = transacoesMesAtual
+    .filter((transacao) => transacao.tipo === "Despesa")
+    .reduce((acc, transacao) => acc + transacao.total, 0);
+
+  const saldo = totalReceita - totalDespesa;
 
   return (
     <TransacoesContext.Provider
@@ -113,11 +155,19 @@ export default function TransacoesProvider({
         categorias,
         addTransacao,
         fetchTransacoes,
+        fetchTransacoesMesAtual,
         fetchCategorias,
         deleteTransacao,
         totalReceita,
         totalDespesa,
         saldo,
+        setMesEscolhido,
+        setAnoEscolhido,
+        totalReceitaMesEscolhido,
+        totalDespesaMesEscolhido,
+        saldoMesEscolhido,
+        formatarData,
+        formatarTotal,
       }}
     >
       {children}
