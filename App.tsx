@@ -16,6 +16,7 @@ import AddTransactionScreen from "./screens/AddTransactionScreen/AddTransactionS
 import TransactionScreen from "./screens/TransactionsScreen/TransactionsScreen";
 import HistoryScreen from "./screens/HistoryScreen/HistoryScreen";
 import { SQLiteProvider } from "expo-sqlite/next";
+import SQLite from "expo-sqlite/legacy";
 import TransacoesProvider from "./utils/TransactionContext";
 
 const Tab = createBottomTabNavigator();
@@ -32,6 +33,51 @@ const loadDatabase = async () => {
       { intermediates: true }
     );
     await FileSystem.downloadAsync(dbUri, dbFilePath);
+
+    const db = SQLite.openDatabase(dbName);
+    db.transaction((tx) => {
+      // Cria a tabela categoria se não existir
+      tx.executeSql(
+        ` CREATE TABLE IF NOT EXISTS categoria (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      tipo TEXT NOT NULL CHECK (type IN ('Despesa', 'Receita'))
+      );
+        `
+      );
+      // Cria a tabela transacao se não existir
+      tx.executeSql(
+        `
+      CREATE TABLE IF NOT EXISTS transacao (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      tipo TEXT NOT NULL CHECK (tipo IN ('Despesa', 'Receita')),
+      total REAL NOT NULL,
+      categoria_id INTEGER NOT NULL,
+      data INTEGER NOT NULL,
+      descricao VARCHAR(255),
+      FOREIGN KEY (categoria_id) REFERENCES categoria(id)
+      );
+      `
+      );
+      // Insere as categorias padrão
+      tx.executeSql(
+        `
+      INSERT INTO categoria (nome, tipo) VALUES ('Alimentação', 'Despesa');
+      INSERT INTO categoria (nome, tipo) VALUES ('Assinaturas', 'Despesa');
+      INSERT INTO categoria (nome, tipo) VALUES ('Compras', 'Despesa');
+      INSERT INTO categoria (nome, tipo) VALUES ('Despesas Moradia', 'Despesa');
+      INSERT INTO categoria (nome, tipo) VALUES ('Educação', 'Despesa');
+      INSERT INTO categoria (nome, tipo) VALUES ('Lazer', 'Despesa');
+      INSERT INTO categoria (nome, tipo) VALUES ('Outras Despesas', 'Despesa');
+      INSERT INTO categoria (nome, tipo) VALUES ('Pets', 'Despesa');
+      INSERT INTO categoria (nome, tipo) VALUES ('Saúde', 'Despesa');
+      INSERT INTO categoria (nome, tipo) VALUES ('Transporte', 'Despesa');
+      INSERT INTO categoria (nome, tipo) VALUES ('Salário', 'Receita');
+      INSERT INTO categoria (nome, tipo) VALUES ('Outras Receitas', 'Receita');
+      INSERT INTO categoria (nome, tipo) VALUES ('Vendas', 'Receita');
+      `
+      );
+    });
   }
 };
 
@@ -63,7 +109,6 @@ export default function App() {
                   tabBarInactiveTintColor: "#ffc146",
                   tabBarStyle: {
                     backgroundColor: "#333333",
-                    // backgroundColor: '#8446ff',
                   },
                   tabBarAccessibilityLabel: "Barra de navegação",
                 }}
