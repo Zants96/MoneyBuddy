@@ -2,11 +2,12 @@ import { SQLiteDatabase } from "expo-sqlite/next";
 
 export async function initDB(db: SQLiteDatabase) {
   await db.execAsync(`
-    
+
     CREATE TABLE IF NOT EXISTS categoria (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id INTEGER,
       nome TEXT NOT NULL,
-      tipo TEXT NOT NULL CHECK (tipo IN ('Despesa', 'Receita'))
+      tipo TEXT NOT NULL CHECK (tipo IN ('Despesa', 'Receita')),
+      PRIMARY KEY (id, nome)
     );
 
     CREATE TABLE IF NOT EXISTS transacao (
@@ -15,35 +16,32 @@ export async function initDB(db: SQLiteDatabase) {
       total REAL NOT NULL,
       categoria_id INTEGER NOT NULL,
       data INTEGER NOT NULL,
-      categoria TEXT NOT NULL,
+      categoria TEXT,
       descricao VARCHAR(255),
       FOREIGN KEY (categoria_id) REFERENCES categoria(id)
     );
   `);
 
-  const result: any = await db.execAsync(
-    `SELECT COUNT(*) as count FROM categoria;`
-  );
-  const count = result?.[0]?.rows?.[0]?.count;
+  const defaultCategories = [
+    { id: 1, nome: "Alimentação", tipo: "Despesa" },
+    { id: 2, nome: "Assinaturas", tipo: "Despesa" },
+    { id: 3, nome: "Compras", tipo: "Despesa" },
+    { id: 4, nome: "Despesas Moradia", tipo: "Despesa" },
+    { id: 5, nome: "Educação", tipo: "Despesa" },
+    { id: 6, nome: "Lazer", tipo: "Despesa" },
+    { id: 7, nome: "Outras Despesas", tipo: "Despesa" },
+    { id: 8, nome: "Pets", tipo: "Despesa" },
+    { id: 9, nome: "Saúde", tipo: "Despesa" },
+    { id: 10, nome: "Transporte", tipo: "Despesa" },
+    { id: 11, nome: "Salário", tipo: "Receita" },
+    { id: 12, nome: "Outras Receitas", tipo: "Receita" },
+    { id: 13, nome: "Vendas", tipo: "Receita" },
+  ];
 
-  console.log("result", result);
-  console.log("count", count);
-
-  if (count === 0 || count === undefined) {
+  for (const category of defaultCategories) {
     await db.execAsync(`
-      INSERT INTO categoria (nome, tipo) VALUES ('Alimentação', 'Despesa');
-      INSERT INTO categoria (nome, tipo) VALUES ('Assinaturas', 'Despesa');
-      INSERT INTO categoria (nome, tipo) VALUES ('Compras', 'Despesa');
-      INSERT INTO categoria (nome, tipo) VALUES ('Despesas Moradia', 'Despesa');
-      INSERT INTO categoria (nome, tipo) VALUES ('Educação', 'Despesa');
-      INSERT INTO categoria (nome, tipo) VALUES ('Lazer', 'Despesa');
-      INSERT INTO categoria (nome, tipo) VALUES ('Outras Despesas', 'Despesa');
-      INSERT INTO categoria (nome, tipo) VALUES ('Pets', 'Despesa');
-      INSERT INTO categoria (nome, tipo) VALUES ('Saúde', 'Despesa');
-      INSERT INTO categoria (nome, tipo) VALUES ('Transporte', 'Despesa');
-      INSERT INTO categoria (nome, tipo) VALUES ('Salário', 'Receita');
-      INSERT INTO categoria (nome, tipo) VALUES ('Outras Receitas', 'Receita');
-      INSERT INTO categoria (nome, tipo) VALUES ('Vendas', 'Receita');
-    `);
+    INSERT OR IGNORE INTO categoria (id, nome, tipo)
+    VALUES (${category.id}, '${category.nome}', '${category.tipo}');
+  `);
   }
 }
