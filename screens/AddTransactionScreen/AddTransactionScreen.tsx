@@ -1,5 +1,12 @@
 import React, { useState, useContext } from "react";
-import { TextInput, View, Text, Pressable, StyleSheet } from "react-native";
+import {
+  TextInput,
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import RNPickerSelect from "react-native-picker-select/";
 import { ITransacao } from "../../interface/types";
 import { TextInputMask } from "react-native-masked-text";
@@ -42,72 +49,79 @@ export default function AddTransactionScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Tipo de Transação</Text>
-      <View style={styles.pickerContainer}>
-        <RNPickerSelect
-          onValueChange={(itemValue) => setTipoSelecionado(itemValue)}
-          items={[
-            { label: "Receita", value: "Receita" },
-            { label: "Despesa", value: "Despesa" },
-          ]}
-          style={{
-            inputIOS: styles.picker,
-            inputAndroid: styles.picker,
-          }}
-          value={tipoSelecionado}
-          placeholder={{ label: "Selecione o tipo da transação", value: null }}
-        />
-      </View>
-
-      <Text style={styles.label}>Categoria</Text>
-      <View style={styles.pickerContainer}>
-        <RNPickerSelect
-          onValueChange={(itemValue) => setCategoria(itemValue)}
-          items={categorias.map((categoria) => ({
-            label: categoria.nome,
-            value: categoria.nome,
-          }))}
-          style={{
-            inputIOS: styles.picker,
-            inputAndroid: styles.picker,
-          }}
-          value={categoria}
-          placeholder={{ label: "Selecione uma categoria", value: null }}
-        />
-      </View>
-
-      <Text style={styles.label}>Descrição</Text>
-      <TextInput
-        style={styles.input}
-        value={descricao}
-        onChangeText={setDescricao}
-      />
-
-      <Text style={styles.label}>Total</Text>
-      <TextInputMask
-        type={"money"}
-        style={styles.input}
-        value={total}
-        onChangeText={setTotal}
-      />
-
-      <Pressable style={styles.button} onPress={handleAddTransacao}>
-        <Text style={styles.buttonText}>Adicionar Transação</Text>
-      </Pressable>
-      {sucesso && (
-        <View style={styles.sucesso}>
-          <Text style={styles.sucessoText}>
-            Transação adicionada com sucesso!
-          </Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.label}>Tipo de Transação</Text>
+        <View style={styles.pickerContainer}>
+          <RNPickerSelect
+            onValueChange={(itemValue) => setTipoSelecionado(itemValue)}
+            items={[
+              { label: "Receita", value: "Receita" },
+              { label: "Despesa", value: "Despesa" },
+            ]}
+            style={{
+              inputIOS: styles.picker,
+              inputAndroid: styles.picker,
+            }}
+            value={tipoSelecionado}
+            placeholder={{
+              label: "Selecione o tipo da transação",
+              value: null,
+            }}
+          />
         </View>
-      )}
-      {erro && (
-        <View style={styles.erro}>
-          <Text style={styles.erroText}>Todos os campos são obrigatórios!</Text>
+
+        <Text style={styles.label}>Categoria</Text>
+        <View style={styles.pickerContainer}>
+          <RNPickerSelect
+            onValueChange={(itemValue) => setCategoria(itemValue)}
+            items={categorias.map((categoria) => ({
+              label: categoria.nome,
+              value: categoria.nome,
+            }))}
+            style={{
+              inputIOS: styles.picker,
+              inputAndroid: styles.picker,
+            }}
+            value={categoria}
+            placeholder={{ label: "Selecione uma categoria", value: null }}
+          />
         </View>
-      )}
-    </View>
+
+        <Text style={styles.label}>Descrição</Text>
+        <TextInput
+          style={styles.input}
+          value={descricao}
+          onChangeText={setDescricao}
+        />
+
+        <Text style={styles.label}>Total</Text>
+        <TextInputMask
+          type={"money"}
+          style={styles.input}
+          value={total}
+          onChangeText={setTotal}
+        />
+
+        <Pressable style={styles.button} onPress={handleAddTransacao}>
+          <Text style={styles.buttonText}>Adicionar Transação</Text>
+        </Pressable>
+        {sucesso && (
+          <View style={styles.sucesso}>
+            <Text style={styles.sucessoText}>
+              Transação adicionada com sucesso!
+            </Text>
+          </View>
+        )}
+        {erro && (
+          <View style={styles.erro}>
+            <Text style={styles.erroText}>
+              Todos os campos são obrigatórios!
+            </Text>
+          </View>
+        )}
+      </View>
+    </ScrollView>
   );
 }
 

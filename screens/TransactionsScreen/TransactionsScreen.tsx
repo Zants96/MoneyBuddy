@@ -1,5 +1,12 @@
 import React, { useContext, useState } from "react";
-import { View, FlatList, StyleSheet, Text, Pressable } from "react-native";
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Text,
+  Pressable,
+  ScrollView,
+} from "react-native";
 import { TransacoesContext } from "../../utils/TransactionContext";
 import { ITransacao } from "../../interface/types";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -42,7 +49,9 @@ export default function TransacoesScreen() {
           item.tipo === "Despesa" ? styles.despesaTipo : styles.receitaTipo
         }
       >
-        {item.tipo} - {formatarData(item.data)}
+        {item.categoria} / {item.tipo}
+        {"\n"}
+        {formatarData(item.data)}
       </Text>
       <Text></Text>
       <Text
@@ -52,8 +61,6 @@ export default function TransacoesScreen() {
       >
         {formatarTotal(item.total)}
       </Text>
-
-      {/* <Text>{item.categoria}</Text> */}
 
       {modoDeletar && (
         <>
@@ -73,7 +80,7 @@ export default function TransacoesScreen() {
   );
 
   return temTransacao ? (
-    <>
+    <ScrollView>
       <View style={styles.container}>
         <FlatList
           data={transacoes}
@@ -104,7 +111,7 @@ export default function TransacoesScreen() {
           </Text>
         </Pressable>
       </View>
-    </>
+    </ScrollView>
   ) : (
     <View style={styles.containeTitle}>
       <Text style={styles.title}>Nenhuma transação encontrada</Text>
@@ -139,10 +146,12 @@ const styles = StyleSheet.create({
   despesaTipo: {
     color: "#CC0000",
     fontSize: 16,
+    marginTop: 2,
   },
   receitaTipo: {
     color: "#008800",
     fontSize: 16,
+    marginTop: 2,
   },
   despesaDescricao: {
     color: "#CC0000",

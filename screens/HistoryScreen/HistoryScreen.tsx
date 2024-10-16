@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, ScrollView } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { TransacoesContext } from "../../utils/TransactionContext";
 import { ITransacao } from "../../interface/types";
@@ -83,9 +83,10 @@ export default function HistoryScreen() {
           item.tipo === "Despesa" ? styles.despesaTipo : styles.receitaTipo
         }
       >
-        {item.tipo} - {formatarData(item.data)}
+        {item.categoria} / {item.tipo}
+        {"\n"}
+        {formatarData(item.data)}
       </Text>
-      <Text></Text>
       <Text
         style={
           item.tipo === "Despesa" ? styles.despesaTotal : styles.receitaTotal
@@ -97,7 +98,7 @@ export default function HistoryScreen() {
   );
 
   return (
-    <>
+    <ScrollView>
       <View style={styles.container}>
         <View style={styles.containerPicker}>
           <View style={styles.pickerContainer}>
@@ -148,7 +149,7 @@ export default function HistoryScreen() {
         />
         <Text></Text>
       </View>
-    </>
+    </ScrollView>
   );
 }
 
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
   containerFlatlist: {
     flex: 2,
     justifyContent: "flex-start",
-    padding: 10,
+    padding: 5,
     borderWidth: 1,
     borderColor: "#8446ff",
     borderRadius: 10,
@@ -239,10 +240,12 @@ const styles = StyleSheet.create({
   despesaTipo: {
     color: "#CC0000",
     fontSize: 16,
+    marginTop: 2,
   },
   receitaTipo: {
     color: "#008800",
     fontSize: 16,
+    marginTop: 2,
   },
   despesaDescricao: {
     color: "#CC0000",
@@ -258,10 +261,12 @@ const styles = StyleSheet.create({
     color: "#CC0000",
     fontSize: 18,
     fontWeight: "bold",
+    marginTop: 12,
   },
   receitaTotal: {
     color: "#008800",
     fontSize: 18,
     fontWeight: "bold",
+    marginTop: 12,
   },
 });
