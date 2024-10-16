@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   containerPicker: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    padding: 10,
+    padding: 5,
   },
   pickerContainer: {
     height: 50,
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
-    margin: 10,
+    margin: 5,
     backgroundColor: "#fff",
     justifyContent: "center",
   },

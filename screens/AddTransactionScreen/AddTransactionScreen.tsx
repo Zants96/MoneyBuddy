@@ -56,6 +56,7 @@ export default function AddTransactionScreen() {
             inputAndroid: styles.picker,
           }}
           value={tipoSelecionado}
+          placeholder={{ label: "Selecione o tipo da transação", value: null }}
         />
       </View>
 
@@ -72,6 +73,7 @@ export default function AddTransactionScreen() {
             inputAndroid: styles.picker,
           }}
           value={categoria}
+          placeholder={{ label: "Selecione uma categoria", value: null }}
         />
       </View>
 
@@ -120,8 +122,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#8446ff",
-    marginTop: 16,
-    marginBottom: 8,
+    marginTop: 10,
+    marginBottom: 6,
   },
   input: {
     height: 50,
