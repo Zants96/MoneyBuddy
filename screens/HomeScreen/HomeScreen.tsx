@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import { TransacoesContext } from "../../utils/TransactionContext";
 
 export default function HomeScreen() {

@@ -133,7 +133,7 @@ export default function HistoryScreen() {
         <Text
           style={[
             styles.saldoTexto,
-            saldoMesEscolhido >= 0 ? styles.positive : styles.negative,
+            saldoMesEscolhido >= 0 ? styles.positivo : styles.negativo,
           ]}
         >
           Saldo: R$ {formataSaldoMesEscolhido}
@@ -197,7 +197,6 @@ const styles = StyleSheet.create({
     height: 50,
     width: "100%",
   },
-
   receitaTexto: {
     fontSize: 18,
     color: "green",
@@ -213,10 +212,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 5,
   },
-  positive: {
+  positivo: {
     color: "green",
   },
-  negative: {
+  negativo: {
     color: "red",
   },
   despesa: {

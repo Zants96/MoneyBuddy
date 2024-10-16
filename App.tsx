@@ -1,22 +1,13 @@
-import React, { useEffect, useState, Suspense, startTransition } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
+import React from "react";
+import { SafeAreaView, View, Text, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Asset } from "expo-asset";
-import * as FileSystem from "expo-file-system";
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import AddTransactionScreen from "./screens/AddTransactionScreen/AddTransactionScreen";
 import TransactionScreen from "./screens/TransactionsScreen/TransactionsScreen";
 import HistoryScreen from "./screens/HistoryScreen/HistoryScreen";
 import { SQLiteProvider } from "expo-sqlite/next";
-import SQLite from "expo-sqlite/legacy";
 import TransacoesProvider from "./utils/TransactionContext";
 import { initDB } from "./database/initDB";
 
@@ -31,7 +22,17 @@ export default function App() {
       <SQLiteProvider databaseName="sqliteDB.db" onInit={initDB}>
         <TransacoesProvider>
           <NavigationContainer>
-            <Tab.Navigator>
+            <Tab.Navigator
+              initialRouteName="Home"
+              screenOptions={{
+                tabBarStyle: {
+                  backgroundColor: "#333333",
+                },
+                tabBarActiveTintColor: "#f0f0f0",
+                tabBarInactiveTintColor: "#ffc146",
+                tabBarActiveBackgroundColor: "#8446ff",
+              }}
+            >
               <Tab.Screen
                 name="Home"
                 component={HomeScreen}
