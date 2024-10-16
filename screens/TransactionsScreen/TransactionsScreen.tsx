@@ -86,7 +86,7 @@ export default function TransacoesScreen() {
           onPress={handleModoDeletar}
           style={() => [
             styles.modoDeletar,
-            modoDeletar && { backgroundColor: "#FF0000" },
+            modoDeletar && { backgroundColor: "#CC0000" },
           ]}
         >
           <Text
@@ -119,46 +119,48 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
   },
   despesa: {
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingBottom: 10,
     marginVertical: 8,
     marginHorizontal: 16,
     borderBottomWidth: 1,
-    borderColor: "red",
+    borderColor: "#CC0000",
     borderRadius: 10,
   },
   receita: {
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingBottom: 10,
     marginVertical: 8,
     marginHorizontal: 16,
     borderBottomWidth: 1,
-    borderColor: "green",
+    borderColor: "#008800",
     borderRadius: 10,
   },
   despesaTipo: {
-    color: "red",
+    color: "#CC0000",
     fontSize: 16,
   },
   receitaTipo: {
-    color: "green",
+    color: "#008800",
     fontSize: 16,
   },
   despesaDescricao: {
-    color: "red",
+    color: "#CC0000",
     fontWeight: "bold",
     fontSize: 21,
   },
   receitaDescricao: {
-    color: "green",
+    color: "#008800",
     fontWeight: "bold",
     fontSize: 21,
   },
   despesaTotal: {
-    color: "red",
+    color: "#CC0000",
     fontSize: 18,
     fontWeight: "bold",
   },
   receitaTotal: {
-    color: "green",
+    color: "#008800",
     fontSize: 18,
     fontWeight: "bold",
   },
@@ -175,10 +177,10 @@ const styles = StyleSheet.create({
   },
   apagar: {
     padding: 10,
-    marginVertical: 8,
+    marginTop: 16,
     marginHorizontal: 16,
     borderWidth: 1,
-    borderColor: "red",
+    borderColor: "#CC0000",
     borderRadius: 10,
   },
   apagarView: {
@@ -187,7 +189,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   apagarTexto: {
-    color: "#FF0000",
+    color: "#CC0000",
     textAlign: "center",
     marginHorizontal: 5,
   },
@@ -196,11 +198,11 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     borderWidth: 1,
-    borderColor: "#FF0000",
+    borderColor: "#CC0000",
     borderRadius: 10,
   },
   modoDeletarText: {
-    color: "#FF0000",
+    color: "#CC0000",
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",

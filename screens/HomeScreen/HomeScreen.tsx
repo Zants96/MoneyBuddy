@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     margin: 10,
-    backgroundColor: "green",
+    backgroundColor: "#008800",
   },
   containerDespesas: {
     flex: 1,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     margin: 10,
-    backgroundColor: "red",
+    backgroundColor: "#AA0000",
   },
   containerSaldo: {
     flex: 1,

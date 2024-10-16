@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 10,
     marginBottom: 16,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
   },
   pickerContainer: {
     height: 50,
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 16,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     justifyContent: "center",
   },
   picker: {
@@ -156,12 +156,12 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   buttonText: {
-    color: "#fff",
+    color: "#ffffff",
     fontSize: 16,
     fontWeight: "bold",
   },
   sucesso: {
-    backgroundColor: "#ffc146",
+    backgroundColor: "#008800",
     padding: 14,
     marginTop: 12,
     height: 50,
@@ -171,12 +171,12 @@ const styles = StyleSheet.create({
   sucessoText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#8446ff",
+    color: "#f0f0f0",
     textAlign: "center",
     justifyContent: "center",
   },
   erro: {
-    backgroundColor: "#ff4646",
+    backgroundColor: "#AA0000",
     padding: 14,
     marginTop: 12,
     height: 50,
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   erroText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#ffffff",
     textAlign: "center",
     justifyContent: "center",
   },
