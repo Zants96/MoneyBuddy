@@ -1,15 +1,9 @@
-import React, { useContext, useState } from "react";
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  Text,
-  Pressable,
-  ScrollView,
-} from "react-native";
+import React, { useContext, useState, useEffect } from "react";
+import { View, FlatList, StyleSheet, Text, Pressable } from "react-native";
 import { TransacoesContext } from "../../utils/TransactionContext";
 import { ITransacao } from "../../interface/types";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function TransacoesScreen() {
   const context = useContext(TransacoesContext);
@@ -19,8 +13,12 @@ export default function TransacoesScreen() {
     fetchTransacoesMesAtual,
     formatarData,
     formatarTotal,
+    atualizarAbaAtiva,
+    abaAtiva,
   } = context!;
   const [modoDeletar, setModoDeletar] = useState(false);
+
+  useFocusEffect(() => atualizarAbaAtiva("Transacoes"));
 
   const handleDelete = (id: number) => {
     deleteTransacao(id);
@@ -31,7 +29,11 @@ export default function TransacoesScreen() {
     setModoDeletar(!modoDeletar);
   };
 
-  const temTransacao = transacoes.length > 0;
+  const temTransacao = transacoes[0] ? true : false;
+
+  useEffect(() => {
+    fetchTransacoesMesAtual();
+  }, [abaAtiva]);
 
   const renderItem = ({ item }: { item: ITransacao }) => (
     <View style={item.tipo === "Despesa" ? styles.despesa : styles.receita}>
@@ -80,7 +82,7 @@ export default function TransacoesScreen() {
   );
 
   return temTransacao ? (
-    <ScrollView>
+    <>
       <View style={styles.container}>
         <FlatList
           data={transacoes}
@@ -111,9 +113,9 @@ export default function TransacoesScreen() {
           </Text>
         </Pressable>
       </View>
-    </ScrollView>
+    </>
   ) : (
-    <View style={styles.containeTitle}>
+    <View style={styles.containerTitle}>
       <Text style={styles.title}>Nenhuma transação encontrada</Text>
     </View>
   );
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  containeTitle: {
+  containerTitle: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

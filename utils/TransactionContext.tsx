@@ -23,6 +23,11 @@ export default function TransacoesProvider({
   const anoAtual = dataAtual.getFullYear();
   const [mesEscolhido, setMesEscolhido] = useState(new Date().getMonth());
   const [anoEscolhido, setAnoEscolhido] = useState(new Date().getFullYear());
+  const [abaAtiva, setAbaAtiva] = useState<string>("Home");
+
+  const atualizarAbaAtiva = (novaAba: string) => {
+    setAbaAtiva(novaAba);
+  };
 
   const formatarData = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -42,11 +47,18 @@ export default function TransacoesProvider({
 
   const getTransacoesMesAtualDoDB = async (): Promise<ITransacao[]> => {
     const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth() + 1; // getMonth() retorna 0-11, então adicionamos 1
+    const currentMonth = new Date().getMonth() + 1;
 
     const transacoes = await db.getAllAsync<ITransacao>(
       `SELECT * FROM transacao WHERE strftime('%Y', data) = ? AND strftime('%m', data) = ?;`,
       [currentYear.toString(), currentMonth.toString().padStart(2, "0")]
+    );
+    return transacoes;
+  };
+
+  const getTransacoesDoDB = async (): Promise<ITransacao[]> => {
+    const transacoes = await db.getAllAsync<ITransacao>(
+      `SELECT * FROM transacao;`
     );
     return transacoes;
   };
@@ -73,7 +85,7 @@ export default function TransacoesProvider({
   };
 
   const fetchTransacoes = async () => {
-    const fetchedTransacoes = await getTransacoesMesAtualDoDB();
+    const fetchedTransacoes = await getTransacoesDoDB();
     setTransacoes(fetchedTransacoes);
   };
 
@@ -108,9 +120,17 @@ export default function TransacoesProvider({
   };
 
   useEffect(() => {
-    fetchTransacoes();
-    fetchCategorias();
-  }, [db]);
+    if (abaAtiva === "Home") {
+      fetchTransacoesMesAtual();
+    } else if (abaAtiva === "Historico") {
+      fetchTransacoes();
+    } else if (abaAtiva === "Adicionar") {
+      fetchCategorias();
+    } else if (abaAtiva === "Transacoes") {
+      fetchTransacoesMesAtual();
+    }
+    console.log("Aba ativa: ", abaAtiva);
+  }, [abaAtiva]);
 
   const transacoesMesEscolhido = transacoes.filter((transacao) => {
     const dataTransacao = new Date(transacao.data);
@@ -168,6 +188,8 @@ export default function TransacoesProvider({
         saldoMesEscolhido,
         formatarData,
         formatarTotal,
+        atualizarAbaAtiva,
+        abaAtiva,
       }}
     >
       {children}

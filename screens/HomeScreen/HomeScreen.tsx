@@ -1,10 +1,14 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { View, Text, StyleSheet } from "react-native";
 import { TransacoesContext } from "../../utils/TransactionContext";
+import { set } from "date-fns";
 
 export default function HomeScreen() {
   const context = useContext(TransacoesContext);
-  const { totalReceita, totalDespesa, saldo } = context!;
+  const { totalReceita, totalDespesa, saldo, atualizarAbaAtiva } = context!;
+
+  useFocusEffect(() => atualizarAbaAtiva("Home"));
 
   let formataReceita = totalReceita.toLocaleString("pt-br", {
     minimumFractionDigits: 2,

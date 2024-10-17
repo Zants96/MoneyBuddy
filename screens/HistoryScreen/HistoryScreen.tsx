@@ -1,8 +1,9 @@
-import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, FlatList, ScrollView } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { TransacoesContext } from "../../utils/TransactionContext";
 import { ITransacao } from "../../interface/types";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function HistoryScreen() {
   const context = useContext(TransacoesContext);
@@ -15,8 +16,10 @@ export default function HistoryScreen() {
     transacoes,
     formatarData,
     formatarTotal,
+    atualizarAbaAtiva,
+    abaAtiva,
+    fetchTransacoes,
   } = context!;
-
   const [mes, setMes] = useState(new Date().getMonth());
   const [ano, setAno] = useState(new Date().getFullYear());
   const months = [
@@ -34,6 +37,12 @@ export default function HistoryScreen() {
     "Dezembro",
   ];
 
+  useFocusEffect(() => atualizarAbaAtiva("Histórico"));
+
+  useEffect(() => {
+    fetchTransacoes();
+  }, [abaAtiva]);
+
   const handleMesChange = (itemValue: number) => {
     setMes(itemValue);
     setMesEscolhido(itemValue);
@@ -44,7 +53,7 @@ export default function HistoryScreen() {
     setAnoEscolhido(itemValue);
   };
 
-  const filteredTransacoes = transacoes.filter((transacao: ITransacao) => {
+  const transacoesFiltradas = transacoes.filter((transacao: ITransacao) => {
     const transacaoDate = new Date(transacao.data);
     return (
       transacaoDate.getMonth() === mes && transacaoDate.getFullYear() === ano
@@ -98,7 +107,7 @@ export default function HistoryScreen() {
   );
 
   return (
-    <ScrollView>
+    <>
       <View style={styles.container}>
         <View style={styles.containerPicker}>
           <View style={styles.pickerContainer}>
@@ -141,15 +150,21 @@ export default function HistoryScreen() {
         </Text>
       </View>
 
-      <View style={styles.containerFlatlist}>
-        <FlatList
-          data={filteredTransacoes}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id!.toString()}
-        />
-        <Text></Text>
-      </View>
-    </ScrollView>
+      {transacoesFiltradas.length > 0 ? (
+        <View style={styles.containerFlatlist}>
+          <FlatList
+            data={transacoesFiltradas}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id!.toString()}
+          />
+          <Text>{"\n"}</Text>
+        </View>
+      ) : (
+        <View style={styles.containerTitle}>
+          <Text style={styles.title}>Nenhuma transação encontrada</Text>
+        </View>
+      )}
+    </>
   );
 }
 
@@ -174,10 +189,20 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: "#f0f0f0",
   },
+  containerTitle: {
+    flex: 2,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#8446ff",
+    borderRadius: 10,
+    margin: 10,
+    backgroundColor: "#f0f0f0",
+  },
   title: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#333333",
+    color: "#8446ff",
   },
   containerPicker: {
     flexDirection: "row",
@@ -186,7 +211,7 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     height: 50,
-    width: 150,
+    width: 155,
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
@@ -197,6 +222,9 @@ const styles = StyleSheet.create({
   picker: {
     height: 50,
     width: "100%",
+    color: "#8446ff",
+    aspectRatio: 3,
+    alignSelf: "flex-end",
   },
   receitaTexto: {
     fontSize: 18,
