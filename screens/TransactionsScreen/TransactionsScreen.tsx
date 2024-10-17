@@ -33,7 +33,7 @@ export default function TransacoesScreen() {
 
   useEffect(() => {
     fetchTransacoesMesAtual();
-  }, [abaAtiva]);
+  }, [abaAtiva, modoDeletar]);
 
   const renderItem = ({ item }: { item: ITransacao }) => (
     <View style={item.tipo === "Despesa" ? styles.despesa : styles.receita}>

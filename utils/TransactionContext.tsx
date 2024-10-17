@@ -129,7 +129,6 @@ export default function TransacoesProvider({
     } else if (abaAtiva === "Transacoes") {
       fetchTransacoesMesAtual();
     }
-    console.log("Aba ativa: ", abaAtiva);
   }, [abaAtiva]);
 
   const transacoesMesEscolhido = transacoes.filter((transacao) => {

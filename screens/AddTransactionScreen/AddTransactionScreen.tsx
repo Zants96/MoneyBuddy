@@ -180,12 +180,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-
   buttonDisabled: {
     width: 0,
     height: 0,
   },
-
   container: {
     flex: 1,
     justifyContent: "flex-start",
@@ -207,6 +205,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 16,
     backgroundColor: "#ffffff",
+    color: "#8446ff",
+    fontSize: 16,
   },
   pickerContainer: {
     height: 50,
@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
   picker: {
     height: 50,
     width: "100%",
+    color: "#8446ff",
   },
   button: {
     height: 50,

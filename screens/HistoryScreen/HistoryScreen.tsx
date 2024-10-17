@@ -37,7 +37,7 @@ export default function HistoryScreen() {
     "Dezembro",
   ];
 
-  useFocusEffect(() => atualizarAbaAtiva("Histórico"));
+  useFocusEffect(() => atualizarAbaAtiva("Historico"));
 
   useEffect(() => {
     fetchTransacoes();
