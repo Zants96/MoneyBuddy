@@ -27,9 +27,6 @@ export interface ITransacoesContextProps {
   saldo: number;
   setMesEscolhido: (mes: number) => void;
   setAnoEscolhido: (ano: number) => void;
-  totalReceitaMesEscolhido: number;
-  totalDespesaMesEscolhido: number;
-  saldoMesEscolhido: number;
   formatarData: (dateString: string) => string;
   formatarTotal: (total: number) => string;
   abaAtiva: string;
