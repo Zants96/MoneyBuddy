@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { TransacoesContext } from "../../utils/TransactionContext";
@@ -17,8 +17,6 @@ export default function HistoryScreen() {
     formatarData,
     formatarTotal,
     atualizarAbaAtiva,
-    abaAtiva,
-    fetchTransacoes,
   } = context!;
   const [mes, setMes] = useState(new Date().getMonth());
   const [ano, setAno] = useState(new Date().getFullYear());
@@ -38,10 +36,6 @@ export default function HistoryScreen() {
   ];
 
   useFocusEffect(() => atualizarAbaAtiva("Historico"));
-
-  useEffect(() => {
-    fetchTransacoes();
-  }, [abaAtiva]);
 
   const handleMesChange = (itemValue: number) => {
     setMes(itemValue);

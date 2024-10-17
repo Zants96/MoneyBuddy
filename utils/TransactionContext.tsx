@@ -113,10 +113,10 @@ export default function TransacoesProvider({
     await addTransacaoNoDB(transaction);
     fetchTransacoes();
   };
+
   const deleteTransacao = async (id: number) => {
     const query = "DELETE FROM transacao WHERE id = ?;";
     await db.runAsync(query, id);
-    fetchTransacoes();
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { View, FlatList, StyleSheet, Text, Pressable } from "react-native";
 import { TransacoesContext } from "../../utils/TransactionContext";
 import { ITransacao } from "../../interface/types";
@@ -14,7 +14,6 @@ export default function TransacoesScreen() {
     formatarData,
     formatarTotal,
     atualizarAbaAtiva,
-    abaAtiva,
   } = context!;
   const [modoDeletar, setModoDeletar] = useState(false);
 
@@ -27,13 +26,10 @@ export default function TransacoesScreen() {
 
   const handleModoDeletar = () => {
     setModoDeletar(!modoDeletar);
+    fetchTransacoesMesAtual();
   };
 
   const temTransacao = transacoes[0] ? true : false;
-
-  useEffect(() => {
-    fetchTransacoesMesAtual();
-  }, [abaAtiva, modoDeletar]);
 
   const renderItem = ({ item }: { item: ITransacao }) => (
     <View style={item.tipo === "Despesa" ? styles.despesa : styles.receita}>
