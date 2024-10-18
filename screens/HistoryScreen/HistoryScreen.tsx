@@ -13,6 +13,9 @@ export default function HistoryScreen() {
     totalReceita,
     totalDespesa,
     saldo,
+    totalReceitaMesEscolhido,
+    totalDespesaMesEscolhido,
+    saldoMesEscolhido,
     transacoes,
     formatarData,
     formatarTotal,
@@ -54,13 +57,19 @@ export default function HistoryScreen() {
     );
   });
 
-  let formataReceitaMesEscolhido = totalReceita.toLocaleString("pt-br", {
-    minimumFractionDigits: 2,
-  });
-  let formataDespesaMesEscolhido = totalDespesa.toLocaleString("pt-br", {
-    minimumFractionDigits: 2,
-  });
-  let formataSaldoMesEscolhido = saldo.toLocaleString("pt-br", {
+  let formataReceitaMesEscolhido = totalReceitaMesEscolhido.toLocaleString(
+    "pt-br",
+    {
+      minimumFractionDigits: 2,
+    }
+  );
+  let formataDespesaMesEscolhido = totalDespesaMesEscolhido.toLocaleString(
+    "pt-br",
+    {
+      minimumFractionDigits: 2,
+    }
+  );
+  let formataSaldoMesEscolhido = saldoMesEscolhido.toLocaleString("pt-br", {
     minimumFractionDigits: 2,
   });
 
@@ -131,7 +140,7 @@ export default function HistoryScreen() {
         <Text
           style={[
             styles.saldoTexto,
-            saldo >= 0 ? styles.positivo : styles.negativo,
+            saldoMesEscolhido >= 0 ? styles.positivo : styles.negativo,
           ]}
         >
           Saldo: R$ {formataSaldoMesEscolhido}

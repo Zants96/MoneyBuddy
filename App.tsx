@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView, View, Text, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
+import * as SplashScreen from "expo-splash-screen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
@@ -14,6 +15,22 @@ import { initDB } from "./database/initDB";
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setTimeout(async () => {
+          await SplashScreen.hideAsync();
+        }, 5000);
+      }
+    }
+
+    prepare();
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.appTitleContainer}>
@@ -26,11 +43,12 @@ export default function App() {
               initialRouteName="Home"
               screenOptions={{
                 tabBarStyle: {
-                  backgroundColor: "#333333",
+                  backgroundColor: "#8446ff",
+                  borderTopWidth: 0,
                 },
-                tabBarActiveTintColor: "#f0f0f0",
-                tabBarInactiveTintColor: "#ffc146",
-                tabBarActiveBackgroundColor: "#8446ff",
+                tabBarActiveTintColor: "#8446ff",
+                tabBarInactiveTintColor: "#f0f0f0",
+                tabBarActiveBackgroundColor: "#f0f0f0",
               }}
             >
               <Tab.Screen
@@ -45,7 +63,15 @@ export default function App() {
                     />
                   ),
                   title: "Home",
-                  headerTitle: "Resumo Financeiro",
+                  headerTitle:
+                    "Resumo Financeiro de " +
+                    new Date()
+                      .toLocaleDateString("pt-br", { month: "long" })
+                      .charAt(0)
+                      .toUpperCase() +
+                    new Date()
+                      .toLocaleDateString("pt-br", { month: "long" })
+                      .slice(1),
                   headerTintColor: "#8446ff",
                   tabBarAccessibilityLabel: "Resumo Financeiro",
                 }}
@@ -79,7 +105,15 @@ export default function App() {
                     />
                   ),
                   title: "Transações",
-                  headerTitle: "Transações no Mês",
+                  headerTitle:
+                    "Transações de " +
+                    new Date()
+                      .toLocaleDateString("pt-br", { month: "long" })
+                      .charAt(0)
+                      .toUpperCase() +
+                    new Date()
+                      .toLocaleDateString("pt-br", { month: "long" })
+                      .slice(1),
                   headerTintColor: "#8446ff",
                   tabBarAccessibilityLabel: "Transações",
                 }}

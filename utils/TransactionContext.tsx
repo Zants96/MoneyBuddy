@@ -98,7 +98,6 @@ export default function TransacoesProvider({
     const fetchedCategorias = await getCategoriasDoDB();
     setCategorias(fetchedCategorias);
   };
-
   const addTransacao = async (transaction: ITransacao) => {
     if (
       transaction.total === undefined ||
@@ -132,7 +131,7 @@ export default function TransacoesProvider({
     }
   }, [abaAtiva]);
 
-  const transacoesMes = transacoes.filter((transacao) => {
+  const transacoesMesEscolhido = transacoes.filter((transacao) => {
     const dataTransacao = new Date(transacao.data);
     return (
       dataTransacao.getMonth() === mesEscolhido &&
@@ -140,11 +139,29 @@ export default function TransacoesProvider({
     );
   });
 
-  const totalReceita = transacoesMes
+  const totalReceitaMesEscolhido = transacoesMesEscolhido
     .filter((transacao) => transacao.tipo === "Receita")
     .reduce((acc, transacao) => acc + transacao.total, 0);
 
-  const totalDespesa = transacoesMes
+  const totalDespesaMesEscolhido = transacoesMesEscolhido
+    .filter((transacao) => transacao.tipo === "Despesa")
+    .reduce((acc, transacao) => acc + transacao.total, 0);
+
+  const saldoMesEscolhido = totalReceitaMesEscolhido - totalDespesaMesEscolhido;
+
+  const transacoesMesAtual = transacoes.filter((transacao) => {
+    const dataTransacao = new Date(transacao.data);
+    return (
+      dataTransacao.getMonth() === mesAtual &&
+      dataTransacao.getFullYear() === anoAtual
+    );
+  });
+
+  const totalReceita = transacoesMesAtual
+    .filter((transacao) => transacao.tipo === "Receita")
+    .reduce((acc, transacao) => acc + transacao.total, 0);
+
+  const totalDespesa = transacoesMesAtual
     .filter((transacao) => transacao.tipo === "Despesa")
     .reduce((acc, transacao) => acc + transacao.total, 0);
 
@@ -165,6 +182,9 @@ export default function TransacoesProvider({
         saldo,
         setMesEscolhido,
         setAnoEscolhido,
+        totalReceitaMesEscolhido,
+        totalDespesaMesEscolhido,
+        saldoMesEscolhido,
         formatarData,
         formatarTotal,
         atualizarAbaAtiva,
