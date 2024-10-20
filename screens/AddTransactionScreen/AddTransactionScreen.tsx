@@ -127,6 +127,8 @@ export default function AddTransactionScreen() {
               setMostrarDatePicker(false);
               setData(currentDate);
             }}
+            locale="pt-BR"
+            accentColor="#8446ff"
           />
         )}
 
