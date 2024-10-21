@@ -27,7 +27,6 @@ export default function App() {
         }, 5000);
       }
     }
-
     prepare();
   }, []);
 
