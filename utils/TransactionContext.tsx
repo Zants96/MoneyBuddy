@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
+import * as FileSystem from "expo-file-system";
 import {
   ITransacao,
   ITransacoesContextProps,
@@ -18,6 +19,9 @@ export default function TransacoesProvider({
   const db = useSQLiteContext();
   const [transacoes, setTransacoes] = useState<ITransacao[]>([]);
   const [categorias, setCategorias] = useState<ICategoria[]>([]);
+  const [backupMessage, setBackupMessage] = useState<string>("");
+  const [restoreMessage, setRestoreMessage] = useState<string>("");
+  const [backupDate, setBackupDate] = useState<string>("");
   const dataAtual = new Date();
   const mesAtual = dataAtual.getMonth();
   const anoAtual = dataAtual.getFullYear();
@@ -167,6 +171,55 @@ export default function TransacoesProvider({
 
   const saldo = totalReceita - totalDespesa;
 
+  const backupDatabase = async () => {
+    try {
+      const dbPath = `${FileSystem.documentDirectory}SQLite/sqliteDB.db`;
+      const backupPath = `${FileSystem.documentDirectory}SQLite/sqliteDB_backup.db`;
+
+      await FileSystem.makeDirectoryAsync(
+        `${FileSystem.documentDirectory}SQLite`,
+        { intermediates: true }
+      );
+
+      await FileSystem.copyAsync({
+        from: dbPath,
+        to: backupPath,
+      });
+
+      setBackupMessage("Backup realizado com sucesso!");
+      setBackupDate(formatarData(new Date().toISOString()));
+      setTimeout(() => {
+        setBackupMessage("");
+      }, 2000);
+    } catch (error) {
+      setBackupMessage("Erro ao fazer backup do banco de dados");
+      setTimeout(() => {
+        setBackupMessage("");
+      }, 2000);
+    }
+  };
+
+  const restoreDatabase = async () => {
+    try {
+      const dbPath = `${FileSystem.documentDirectory}SQLite/sqliteDB.db`;
+      const backupPath = `${FileSystem.documentDirectory}SQLite/sqliteDB_backup.db`;
+
+      await FileSystem.copyAsync({
+        from: backupPath,
+        to: dbPath,
+      });
+      setRestoreMessage("Banco de dados restaurado com sucesso!");
+      setTimeout(() => {
+        setRestoreMessage("");
+      }, 2000);
+    } catch (error) {
+      setRestoreMessage(`Erro ao restaurar o banco de dados: ${error}`);
+      setTimeout(() => {
+        setRestoreMessage("");
+      }, 2000);
+    }
+  };
+
   return (
     <TransacoesContext.Provider
       value={{
@@ -189,6 +242,11 @@ export default function TransacoesProvider({
         formatarTotal,
         atualizarAbaAtiva,
         abaAtiva,
+        backupDatabase,
+        restoreDatabase,
+        backupMessage,
+        restoreMessage,
+        backupDate,
       }}
     >
       {children}

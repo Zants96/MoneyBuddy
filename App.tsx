@@ -11,6 +11,7 @@ import HistoryScreen from "./screens/HistoryScreen/HistoryScreen";
 import { SQLiteProvider } from "expo-sqlite/next";
 import TransacoesProvider from "./utils/TransactionContext";
 import { initDB } from "./database/initDB";
+import BackupERestore from "./screens/BackupERestore/BackupERestore";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +25,7 @@ export default function App() {
       } finally {
         setTimeout(async () => {
           await SplashScreen.hideAsync();
-        }, 5000);
+        }, 3000);
       }
     }
     prepare();
@@ -132,6 +133,23 @@ export default function App() {
                   headerTitle: "Histórico de Transações",
                   headerTintColor: "#8446ff",
                   tabBarAccessibilityLabel: "Histórico das transações",
+                }}
+              />
+              <Tab.Screen
+                name="Backup e Restauração"
+                component={BackupERestore}
+                options={{
+                  tabBarIcon: ({ color, size }) => (
+                    <MaterialCommunityIcons
+                      name="database"
+                      color={color}
+                      size={size}
+                    />
+                  ),
+                  title: "Backup",
+                  headerTitle: "Backup e Restauração",
+                  headerTintColor: "#8446ff",
+                  tabBarAccessibilityLabel: "Backup e Restauração",
                 }}
               />
             </Tab.Navigator>

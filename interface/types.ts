@@ -34,4 +34,9 @@ export interface ITransacoesContextProps {
   formatarTotal: (total: number) => string;
   abaAtiva: string;
   atualizarAbaAtiva: (aba: string) => void;
+  backupDatabase: () => void;
+  restoreDatabase: () => void;
+  backupMessage: string;
+  restoreMessage: string;
+  backupDate: string;
 }
