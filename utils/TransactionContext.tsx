@@ -213,7 +213,7 @@ export default function TransacoesProvider({
         setRestoreMessage("");
       }, 2000);
     } catch (error) {
-      setRestoreMessage(`Erro ao restaurar o banco de dados: ${error}`);
+      setRestoreMessage("Erro ao restaurar o banco de dados");
       setTimeout(() => {
         setRestoreMessage("");
       }, 2000);
