@@ -118,6 +118,22 @@ export default function TransacoesProvider({
     fetchTransacoes();
   };
 
+  const editarTransacao = async (transaction: ITransacao) => {
+    const query =
+      "UPDATE transacao SET total = ?, descricao = ?, data = ?, tipo = ?, categoria = ?, categoria_id = ? WHERE id = ?;";
+    await db.runAsync(
+      query,
+      transaction.total,
+      transaction.descricao,
+      transaction.data,
+      transaction.tipo,
+      transaction.categoria,
+      transaction.categoria_id,
+      transaction.id!
+    );
+    fetchTransacoes();
+  };
+
   const deleteTransacao = async (id: number) => {
     const query = "DELETE FROM transacao WHERE id = ?;";
     await db.runAsync(query, id);
@@ -226,6 +242,7 @@ export default function TransacoesProvider({
         transacoes,
         categorias,
         addTransacao,
+        editarTransacao,
         fetchTransacoes,
         fetchTransacoesMesAtual,
         fetchCategorias,

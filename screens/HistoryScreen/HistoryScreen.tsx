@@ -10,9 +10,6 @@ export default function HistoryScreen() {
   const {
     setMesEscolhido,
     setAnoEscolhido,
-    totalReceita,
-    totalDespesa,
-    saldo,
     totalReceitaMesEscolhido,
     totalDespesaMesEscolhido,
     saldoMesEscolhido,

@@ -18,6 +18,7 @@ export interface ITransacoesContextProps {
   transacoes: ITransacao[];
   categorias: ICategoria[];
   addTransacao: (transaction: ITransacao) => void;
+  editarTransacao: (transaction: ITransacao) => void;
   fetchTransacoes: () => void;
   fetchTransacoesMesAtual: () => void;
   fetchCategorias: () => void;

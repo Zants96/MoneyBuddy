@@ -67,7 +67,6 @@ export default function AddTransactionScreen() {
               { label: "Despesa", value: "Despesa" },
             ]}
             style={{
-              inputIOS: styles.picker,
               inputAndroid: styles.picker,
             }}
             value={tipoSelecionado}
@@ -87,7 +86,6 @@ export default function AddTransactionScreen() {
               value: categoria.nome,
             }))}
             style={{
-              inputIOS: styles.picker,
               inputAndroid: styles.picker,
             }}
             value={categoria}
